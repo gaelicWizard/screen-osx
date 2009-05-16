@@ -13,9 +13,6 @@
 set -u
 
 ##
-require general
-    # Import my general package
-        # rtrn
 require screen
     # Import my screen package
         # isscreen
@@ -71,7 +68,6 @@ function store_environment ()
 ##
 function environment_cleanup ()
 {
-    # Begin STACK modificaiton
     perl -pi -e 's;'"${SESSIONENVFILE}"';;g' "$ENVIRONMENTSTACK"
         # Remove the current environment file from the stack
         # Note, it may not be the top of the stack
@@ -81,7 +77,7 @@ function environment_cleanup ()
         # Don't use any functions/aliases
         # Don't prompt
     
-    if [ "$(uniq "$ENVIRONMENTSTACK")" == "$(echo)" ]
+    if [ "$(uniq "$ENVIRONMENTSTACK")" == " " ]
         # If the stack file consists of entirely blank lines, then delete it
     then
         command rm -f "$ENVIRONMENTSTACK"
@@ -100,14 +96,15 @@ function find_sty ()
     ##
     if screen -q -wipe || [ "$?" -eq 9 ]
     then
-        rtrn 1
+        #syslog -s -l Error "There are no usable screen sessions."
+        exit 2
     fi
         # Check if there are attachable sessions, and clean dead ones. If not, return early.
 
 
     STY="$(screen -ls | fgrep gnu.screen | head -n 1 | awk '{print $1}')"
         # Query screen for a running "$PID.gnu.screen" session, one started by my launchd(1) plist
-    
+        
     [ "$STY" ]
         # Bash sets the return value of a function to that of its last command
 }
@@ -118,12 +115,12 @@ function find_sty ()
 
 if ! find_sty
 then
-    echo 'Unable to locate a suitable screen session!' 1>&2
-    rtrn -1
+    echo 'Unable to locate a suitable screen session!' "'find_sty' == ($?)"
+    exit 1
 fi
 
 trap environment_cleanup HUP INT QUIT KILL TSTP
-    # This script needs to cleanup after screen detaches, so don't stop executing when receive HUP.
+    # This script needs to cleanup after screen detaches, so don't stop executing when receive HUP et al.
     #  HUP is usually caused by a closed window, or a disconnected ssh, &c.
     #  Screen should power-detach at a HUP signal, allowing us to continue.
 
@@ -133,7 +130,7 @@ store_environment
 # Start screen
 screen -xRR -p + "${STY}"
     # -x selects an existing session
-    # -RR Really Reconnects
+    # -RR Really Reconnects (creating a new session if needed)
     # -p + creates and selects a new window (shell)
 ret=$? # Save return value
 
@@ -141,4 +138,4 @@ environment_cleanup
     # See function definition above
 ##
 
-rtrn $ret
+exit $ret
