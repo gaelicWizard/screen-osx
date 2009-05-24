@@ -39,7 +39,7 @@ function _load_screen_environment_for_multiattach_f ()
     
         if [ -f "${ENV[$CURRENV]}" ]; then
             #eval unset "${SCREEN_ENV_VARIABLES[@]}"
-            unset SCREEN DISPLAY SSH_AUTH_SOCK SSH_CLIENT SSH_CONNECTION
+            unset SCREEN LANG DISPLAY SSH_AUTH_SOCK SSH_CLIENT SSH_CONNECTION
             . "${ENV[$CURRENV]}"
         fi
     fi
