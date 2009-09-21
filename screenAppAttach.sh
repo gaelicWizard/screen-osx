@@ -117,6 +117,7 @@ function find_sty ()
 if ! find_sty
 then
     echo 'Unable to locate a suitable screen session!' "'find_sty' == ($?)"
+    sleep 1
     exit 1
 fi
 
@@ -132,6 +133,7 @@ store_environment
 screen -xRR -p + "${STY}"
     # -x selects an existing session
     # -RR Really Reconnects (creating a new session if needed)
+        # allows a race between find_sty and here...
     # -p + creates and selects a new window (shell)
 ret=$? # Save return value
 
