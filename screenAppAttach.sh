@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash --login
 
 ###
 ## COPYRIGHT John Davidorff Pell
@@ -13,7 +13,7 @@
 set -u
 
 ##
-require screen
+require screen || exit 2
     # Import my screen package
         # isscreen
         # isappscreen
@@ -55,7 +55,7 @@ function store_environment ()
         # Add the creation time of this file
     ##
 
-    ENVIRONMENTSTACK="${HOME}/.screen/${STY}.environment_stack"
+    ENVIRONMENTSTACK="${HOME}/.screen/${theSTY}.environment_stack"
 
     echo " ${SESSIONENVFILE}" >> "$ENVIRONMENTSTACK"
         # Add this new environment file to the top of the environment stack
@@ -87,7 +87,7 @@ function environment_cleanup ()
 
 ##
 # find_sty asks screen(1) for a suitable $STY
-# Sets global STY
+# Sets global theSTY
 ##
 function find_sty ()
 {
@@ -103,10 +103,10 @@ function find_sty ()
         # Check if there are attachable sessions, and clean dead ones. If not, return early.
 
 
-    STY="$(screen -ls | fgrep gnu.screen | head -n 1 | awk '{print $1}')"
+    theSTY="$(screen -ls | fgrep gnu.screen | head -n 1 | awk '{print $1}')"
         # Query screen for a running "$PID.gnu.screen" session, one started by my launchd(1) plist
         
-    [ "$STY" ]
+    [ "$theSTY" ]
         # Bash sets the return value of a function to that of its last command
 }
 
@@ -114,12 +114,16 @@ function find_sty ()
 # If we've found the right session, then store environment and attach!
 ##
 
-if ! find_sty
-then
-    echo 'Unable to locate a suitable screen session!' "'find_sty' == ($?)"
-    sleep 1
-    exit 1
-fi
+#TODO: fix Snow Leopard hack: ignore pre-existing sessions... 
+#if ! find_sty
+#then
+#    echo 'Unable to locate a suitable screen session!' "'find_sty' == ($?)"
+#    sleep 1
+#    exit 1
+#fi
+
+#TODO: fix Snow Leopard hack: set theSTY to gnu.screen
+theSTY="gnu.screen"
 
 trap environment_cleanup HUP INT QUIT KILL TSTP
     # This script needs to cleanup after screen detaches, so don't stop executing when receive HUP et al.
@@ -130,16 +134,15 @@ store_environment
     # See function definition above
 
 # Start screen
-screen -xRR -p + "${STY}"
+screen -xRR -p + -S "${theSTY}"
     # -x selects an existing session
     # -RR Really Reconnects (creating a new session if needed)
-        # allows a race between find_sty and here...
-    # -p + creates and selects a new window (shell)
+        # allows a race between find_sty and here..., except with Snow Leopard hack (TODO: fix Snow Leopard hack)
+    # -p + creates and selects a new window (shell), on screen _above_ 4.0.3
 ret=$? # Save return value
 
 environment_cleanup
     # See function definition above
 ##
 
-sleep 10
 exit $ret

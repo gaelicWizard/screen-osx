@@ -1,5 +1,7 @@
 #!/usr/bin/open -e
 
+UPDATE: PRELIMINARY Snow Leopard support has been hacked in, pending resolution of a bug report. This support is experimental. The launchd(1) plist is not used for this hack.
+
 IMPORTANT: The last time tested, this package is non-functional on Mac OS X v10.6 Snow Leopard. This is due to a change in Apple's libraries which cause screen(1) to exit prematurely when its attempt to move itself to a different bootstrap namespace fails, due to a change in Apple's libraries which prevent changing bootstrap namespace from a job started non-anonymously (i.e., via a plist instead of via LaunchServices or whatever).
 
 INSTALLATION:
