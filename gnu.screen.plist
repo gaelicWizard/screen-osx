@@ -6,6 +6,8 @@
 	<string>Background</string>
 	<key>KeepAlive</key>
 	<true/>
+	<key>Disabled</key>
+	<true/>
 	<key>EnableGlobbing</key>
 	<false/>
 	<key>Label</key>
