@@ -1,8 +1,7 @@
 #!/bin/sh -c 'echo This file is meant to be sourced.'
 
 #export SCREENDIR="$(defaults read gnu.screen SCREENDIR 2>/dev/null)"
-#[ -d "${SCREENDIR:-}" ] || export SCREENDIR=~/.screen
-#mkdir -p -m u+rwX,go-rwx "${SCREENDIR}" 
+mkdir -p -m u+rwX,go-rwx "${SCREENDIR:=~/.screen}" 
     # Instruct screen to place its sockets and other datas in ~, not /tmp
  
 ## Screen
@@ -43,8 +42,6 @@ function _load_screen_environment_for_multiattach_f ()
             . "${ENV[$CURRENV]}"
         fi
     fi
-
-    unset ENV CURRTIME CURRENV
 }
 ##
 
@@ -52,8 +49,10 @@ if isscreen
 then
     if isappscreen
     then
+        set -e
         require prompt_commands
         # import my prompt_commands package
+        set +e
 
         prompt_command_append "_load_screen_environment_for_multiattach_f"
         # Setup some code to synchronise environment from various concurent logins via multi-attached screen

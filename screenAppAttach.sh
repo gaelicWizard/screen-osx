@@ -92,13 +92,13 @@ function environment_cleanup ()
 function find_sty ()
 {
     ##
-    # Clean the socket dir (this should be optional, to allow for NFS home dirs?)
-    # Find the right screen session to use, this should be a passable argument.
+    # Clean the socket dir (TODO: this should be optional, to allow for NFS home dirs?)
+    # Find the right screen session to use, TODO: this should be a passable argument.
     ##
     if screen -q -wipe || [ "$?" -eq 9 ]
     then
         #syslog -s -l Error "There are no usable screen sessions."
-        exit 2
+        return 2
     fi
         # Check if there are attachable sessions, and clean dead ones. If not, return early.
 
@@ -141,4 +141,5 @@ environment_cleanup
     # See function definition above
 ##
 
+sleep 10
 exit $ret
