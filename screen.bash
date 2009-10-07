@@ -1,7 +1,7 @@
 #!/bin/bash -c 'echo This file is meant to be sourced.'
 
 #export SCREENDIR="$(defaults read gnu.screen SCREENDIR 2>/dev/null)"
-mkdir -p -m u+rwX,go-rwx "${SCREENDIR:=~/.screen}" 
+mkdir -p -m u+rwX,go-rwx "${SCREENDIR:=$HOME/.screen}" 
     # Instruct screen to place its sockets and other datas in ~, not /tmp
 export SCREENDIR
 
