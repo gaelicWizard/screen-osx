@@ -50,10 +50,8 @@ if isscreen
 then
     if isappscreen
     then
-        set -e
-        require prompt_commands
+        require prompt_commands || return -1
         # import my prompt_commands package
-        set +e
 
         prompt_command_append "_load_screen_environment_for_multiattach_f"
         # Setup some code to synchronise environment from various concurent logins via multi-attached screen
