@@ -50,7 +50,7 @@ if isscreen
 then
     if isappscreen
     then
-        require prompt_commands || return -1
+        require prompt_commands.bashrc || return -1
         # import my prompt_commands package
 
         prompt_command_append "_load_screen_environment_for_multiattach_f"

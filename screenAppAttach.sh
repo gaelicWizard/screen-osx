@@ -134,7 +134,8 @@ store_environment
     # See function definition above
 
 # Start screen
-screen -xRR -p + -S "${theSTY}"
+screen -U -xRR -p + -S "${theSTY}"
+    # -U tells screen(1) that the tty allows utf-8.
     # -x selects an existing session
     # -RR Really Reconnects (creating a new session if needed)
         # allows a race between find_sty and here..., except with Snow Leopard hack (TODO: fix Snow Leopard hack)
