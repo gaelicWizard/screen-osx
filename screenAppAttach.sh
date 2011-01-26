@@ -125,13 +125,12 @@ function find_sty ()
 #TODO: fix Snow Leopard hack: set theSTY to gnu.screen
 theSTY="gnu.screen"
 
-trap environment_cleanup HUP INT QUIT KILL TSTP
-    # This script needs to cleanup after screen detaches, so don't stop executing when receive HUP et al.
-    #  HUP is usually caused by a closed window, or a disconnected ssh, &c.
+trap environment_cleanup EXIT
+    # This script needs to cleanup after screen detaches.
+shopt -s huponexit
     #  Screen should power-detach at a HUP signal, allowing us to continue.
 
 store_environment
-    # See function definition above
 
 # Start screen
 screen -U -xRR -p + -S "${theSTY}"
@@ -142,7 +141,7 @@ screen -U -xRR -p + -S "${theSTY}"
     # -p + creates and selects a new window (shell), on screen _above_ 4.0.3
 ret=$? # Save return value
 
-environment_cleanup
+#environment_cleanup
     # See function definition above
 ##
 
