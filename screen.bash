@@ -50,7 +50,7 @@ if isscreen
 then
     if isappscreen
     then
-        require prompt_commands.bashrc || return -1
+        declare -F prompt_command_append >/dev/null || { echo "screen: Unable to manipulate prompt." 1>&2; return; }
         # import my prompt_commands package
 
         prompt_command_append "_load_screen_environment_for_multiattach_f"
