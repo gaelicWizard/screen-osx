@@ -13,12 +13,6 @@
 set -u
 
 ##
-require screen || exit 2
-    # Import my screen package
-        # isscreen
-        # isappscreen
-
-##
 # store_environment stores selected variables from the pre-attach environment
 # Sets global SESSIONENVFILE
 # Reads global STY
@@ -50,6 +44,8 @@ function store_environment ()
     echo "screen -qX setenv DISPLAY \"${DISPLAY:-}\";export DISPLAY=\"${DISPLAY:-}\"" >> "${SESSIONENVFILE}"
     echo "screen -qX setenv SSH_AUTH_SOCK \"${SSH_AUTH_SOCK:-}\";export SSH_AUTH_SOCK=\"${SSH_AUTH_SOCK:-}\"" >> "${SESSIONENVFILE}"
     echo "screen -qX setenv SSH_CONNECTION \"${SSH_CONNECTION:-}\";export SSH_CONNECTION=\"${SSH_CONNECTION:-}\"" >> "${SESSIONENVFILE}"
+    echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\"" >> "${SESSIONENVFILE}"
+	
 
     echo "export LOGGTIME=\"`date +%s`\"" >> "${SESSIONENVFILE}"
         # Add the creation time of this file
@@ -133,7 +129,7 @@ shopt -s huponexit
 store_environment
 
 # Start screen
-screen -U -xRR -p + -S "${theSTY}"
+screen -A -U -xRR -p + -S "${theSTY}"
     # -U tells screen(1) that the tty allows utf-8.
     # -x selects an existing session
     # -RR Really Reconnects (creating a new session if needed)
