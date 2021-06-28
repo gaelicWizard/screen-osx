@@ -23,7 +23,7 @@ function store_environment ()
     ##
     # Create a new, randomly named, file to store the environment for this session
     ##
-    local HOMETEMP="${HOME}/.temp"
+    local HOMETEMP="${SCREENDIR:=${XDG_RUNTIME_DIR:-$HOME/.}${XDG_RUNTIME_DIR:+/}screen}"
     if [ ! -d "$HOMETEMP" ]
     then
         mkdir -m 700 "$HOMETEMP"
@@ -51,7 +51,7 @@ function store_environment ()
         # Add the creation time of this file
     ##
 
-    ENVIRONMENTSTACK="${HOME}/.screen/${theSTY}.environment_stack"
+    ENVIRONMENTSTACK="${SCREENDIR:-${XDG_RUNTIME_DIR:-$HOME/.}${XDG_RUNTIME_DIR:+/}screen}/${theSTY}.environment_stack"
 
     echo " ${SESSIONENVFILE}" >> "$ENVIRONMENTSTACK"
         # Add this new environment file to the top of the environment stack
