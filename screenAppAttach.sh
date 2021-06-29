@@ -16,7 +16,7 @@ mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=$HOME/.bash_sessions}"
 
 ##
 # store_environment stores selected variables from the pre-attach environment
-# Sets global SESSIONENVFILE
+# Sets global SHELL_SESSION_FILE
 # Reads global STY
 # Sets global ENVIRONMENTSTACK
 ##
@@ -31,47 +31,47 @@ function store_environment ()
     # Create a new, randomly named, file to store the environment for this session
     ##
 
-    SESSIONENVFILE="$(mktemp "$SHELL_SESSION_DIR/screen-environment.XXXXXX")"
+    SHELL_SESSION_FILE="$(mktemp "$SHELL_SESSION_DIR/screen-environment.XXXXXX")"
     ##
     
     
     ##
     # Store incoming environment information into the file just created, for use inside screen by `screenenv.sh'
     ##
-    echo "LOGGED_IN=\"`date`\"" >> "${SESSIONENVFILE}"
+    echo "LOGGED_IN=\"`date`\"" >> "${SHELL_SESSION_FILE}"
         # When did I log in (this time)?
 
-    echo "screen -qX setenv SCREEN \"${TERM:-}\";export SCREEN=\"${TERM:-}\"" >> "${SESSIONENVFILE}"
-    echo "screen -qX setenv LANG \"${LANG:-}\";export LANG=\"${LANG:-}\"" >> "${SESSIONENVFILE}"
-    echo "screen -qX setenv DISPLAY \"${DISPLAY:-}\";export DISPLAY=\"${DISPLAY:-}\"" >> "${SESSIONENVFILE}"
-    echo "screen -qX setenv SSH_AUTH_SOCK \"${SSH_AUTH_SOCK:-}\";export SSH_AUTH_SOCK=\"${SSH_AUTH_SOCK:-}\"" >> "${SESSIONENVFILE}"
-    echo "screen -qX setenv SSH_CONNECTION \"${SSH_CONNECTION:-}\";export SSH_CONNECTION=\"${SSH_CONNECTION:-}\"" >> "${SESSIONENVFILE}"
-    echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\"" >> "${SESSIONENVFILE}"
+    echo "screen -qX setenv SCREEN \"${TERM:-}\";export SCREEN=\"${TERM:-}\"" >> "${SHELL_SESSION_FILE}"
+    echo "screen -qX setenv LANG \"${LANG:-}\";export LANG=\"${LANG:-}\"" >> "${SHELL_SESSION_FILE}"
+    echo "screen -qX setenv DISPLAY \"${DISPLAY:-}\";export DISPLAY=\"${DISPLAY:-}\"" >> "${SHELL_SESSION_FILE}"
+    echo "screen -qX setenv SSH_AUTH_SOCK \"${SSH_AUTH_SOCK:-}\";export SSH_AUTH_SOCK=\"${SSH_AUTH_SOCK:-}\"" >> "${SHELL_SESSION_FILE}"
+    echo "screen -qX setenv SSH_CONNECTION \"${SSH_CONNECTION:-}\";export SSH_CONNECTION=\"${SSH_CONNECTION:-}\"" >> "${SHELL_SESSION_FILE}"
+    echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\"" >> "${SHELL_SESSION_FILE}"
 	
 
-    echo "export LOGGTIME=\"`date +%s`\"" >> "${SESSIONENVFILE}"
+    echo "export LOGGTIME=\"`date +%s`\"" >> "${SHELL_SESSION_FILE}"
         # Add the creation time of this file
     ##
 
     ENVIRONMENTSTACK="$SHELL_SESSION_DIR/${theSTY}.environment_stack"
 
-    echo " ${SESSIONENVFILE}" >> "$ENVIRONMENTSTACK"
+    echo " ${SHELL_SESSION_FILE}" >> "$ENVIRONMENTSTACK"
         # Add this new environment file to the top of the environment stack
 }
 
 
 ##
 # environment_cleanup cleans up after store_environment
-# Reads global SESSIONENVFILE
+# Reads global SHELL_SESSION_FILE
 # Reads global ENVIRONMENTSTACK
 ##
 function environment_cleanup ()
 {
-    perl -pi -e 's;'"${SESSIONENVFILE}"';;g' "$ENVIRONMENTSTACK"
+    perl -pi -e 's;'"${SHELL_SESSION_FILE}"';;g' "$ENVIRONMENTSTACK"
         # Remove the current environment file from the stack
         # Note, it may not be the top of the stack
 
-    command rm -f "${SESSIONENVFILE}"
+    command rm -f "${SHELL_SESSION_FILE}"
         # Delete the environment file for this session, since we're done
         # Don't use any functions/aliases
         # Don't prompt
