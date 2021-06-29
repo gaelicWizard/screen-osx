@@ -12,6 +12,8 @@
 #set -e
 set -u
 
+mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=$HOME/.bash_sessions}"
+
 ##
 # store_environment stores selected variables from the pre-attach environment
 # Sets global SESSIONENVFILE
@@ -28,13 +30,8 @@ function store_environment ()
     ##
     # Create a new, randomly named, file to store the environment for this session
     ##
-    local HOMETEMP="${SCREENDIR:=${XDG_RUNTIME_DIR:-$HOME/.}${XDG_RUNTIME_DIR:+/}screen}"
-    if [ ! -d "$HOMETEMP" ]
-    then
-        mkdir -m 700 "$HOMETEMP"
-    fi
 
-    SESSIONENVFILE="$(mktemp "$HOMETEMP/screen-environment.XXXXXX")"
+    SESSIONENVFILE="$(mktemp "$SHELL_SESSION_DIR/screen-environment.XXXXXX")"
     ##
     
     
@@ -56,7 +53,7 @@ function store_environment ()
         # Add the creation time of this file
     ##
 
-    ENVIRONMENTSTACK="${SCREENDIR:-${XDG_RUNTIME_DIR:-$HOME/.}${XDG_RUNTIME_DIR:+/}screen}/${theSTY}.environment_stack"
+    ENVIRONMENTSTACK="$SHELL_SESSION_DIR/${theSTY}.environment_stack"
 
     echo " ${SESSIONENVFILE}" >> "$ENVIRONMENTSTACK"
         # Add this new environment file to the top of the environment stack

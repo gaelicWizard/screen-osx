@@ -1,7 +1,8 @@
 #!/bin/bash -c 'echo This file is meant to be sourced.'
 
 #export SCREENDIR="$(defaults read gnu.screen SCREENDIR 2>/dev/null)"
-mkdir -p -m u+rwX,go-rwx "${SCREENDIR:=${XDG_RUNTIME_DIR:-$HOME/.}${XDG_RUNTIME_DIR:+/}screen}"
+mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=$HOME/.bash_sessions}"
+
     # Instruct screen to place its sockets and other datas in ~, not /tmp
 #export SCREENDIR
 
@@ -27,11 +28,11 @@ function _load_screen_environment_for_multiattach_f ()
 {
     local ENV CURRENV CURRTIME
 
-    if [ -r "${SCREENDIR}/environment.${STY:-}" ]
+    if [ -r "${SHELL_SESSION_DIR}/environment.${STY:-}" ]
     then 
         #CURRTIME=`date +%s`
     
-        ENV=( `< "${SCREENDIR}/environment.${STY:-}"` )
+        ENV=( `< "${SHELL_SESSION_DIR}/environment.${STY:-}"` )
         
         CURRENV="$((${#ENV[@]} -1))"
 
