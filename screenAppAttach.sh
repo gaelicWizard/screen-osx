@@ -130,6 +130,7 @@ store_environment
 
 # Start screen
 screen -A -U -xRR -p + -S "${theSTY}"
+    # -A Adapt  the  sizes of all windows to the size of the current terminal
     # -U tells screen(1) that the tty allows utf-8.
     # -x selects an existing session
     # -RR Really Reconnects (creating a new session if needed)
