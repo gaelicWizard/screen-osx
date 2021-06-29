@@ -20,6 +20,11 @@ set -u
 ##
 function store_environment ()
 {
+    if [ -n "$TERM_SESSION_ID" ]
+    then
+        export SHELL_SESSION_DID_INIT=1 SHELL_SESSIONS_DISABLE=1
+        # Inform Apple Terminal that we do our own sessions.
+    fi
     ##
     # Create a new, randomly named, file to store the environment for this session
     ##
