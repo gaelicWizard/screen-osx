@@ -23,6 +23,10 @@ function isappscreen ()
     fi 
 }
 
+function _set_screen_title_f ()
+{
+    printf "\ek${1:-}\e\\"
+}
 
 function _load_screen_environment_for_multiattach_f ()
 {
@@ -56,6 +60,10 @@ then
 
         prompt_command_append "_load_screen_environment_for_multiattach_f"
         # Setup some code to synchronise environment from various concurent logins via multi-attached screen
+
+        prompt_command_append "_set_screen_title_f"
+        # Clear the screen title when displaying the prompt
+        # this won't actually set a blank title, but it enables `shelltitle "\$ |$SHELL:"` dynamic titling
     fi
 
     alias top="screen 20 top"
