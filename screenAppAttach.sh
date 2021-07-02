@@ -12,7 +12,12 @@
 #set -e
 set -u
 
-mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${HOME:-~}/.bash_sessions}"
+: "${SCREENRC:=${XDG_CONFIG_HOME:-$HOME/.}${XDG_STATE_HOME:+/}screenrc}"
+    # Set SCREENRC to the default location to ensure we can reference it properly
+: "${SCREENDIR:=}"
+
+mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}bash_sessions}"
+readonly SHELL_SESSION_DIR
 
 if [ -n "${TERM_SESSION_ID:-}" ]
 then
@@ -32,12 +37,12 @@ function store_environment ()
     # Create a new, randomly named, file to store the environment for this session
     ##
 
-    SHELL_SESSION_FILE="$(mktemp "${SHELL_SESSION_DIR}/screen-environment.XXXXXX")"
+    SHELL_SESSION_FILE="$(mktemp "${SHELL_SESSION_DIR}/XXXXXX.session")"
     ##
     
     
     ##
-    # Store incoming environment information into the file just created, for use inside screen by `screenenv.sh'
+    # Store incoming environment information into the file just created, for use inside screen by `_screen_load_environment_for_multiattach_f`
     ##
     echo "LOGGED_IN=\"`date`\"" >> "${SHELL_SESSION_FILE}"
         # When did I log in (this time)?
@@ -47,7 +52,7 @@ function store_environment ()
     echo "screen -qX setenv DISPLAY \"${DISPLAY:-}\";export DISPLAY=\"${DISPLAY:-}\"" >> "${SHELL_SESSION_FILE}"
     echo "screen -qX setenv SSH_AUTH_SOCK \"${SSH_AUTH_SOCK:-}\";export SSH_AUTH_SOCK=\"${SSH_AUTH_SOCK:-}\"" >> "${SHELL_SESSION_FILE}"
     echo "screen -qX setenv SSH_CONNECTION \"${SSH_CONNECTION:-}\";export SSH_CONNECTION=\"${SSH_CONNECTION:-}\"" >> "${SHELL_SESSION_FILE}"
-    echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\"" >> "${SHELL_SESSION_FILE}"
+    #echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\"" >> "${SHELL_SESSION_FILE}"
 	
 
     echo "export LOGGTIME=\"`date +%s`\"" >> "${SHELL_SESSION_FILE}"

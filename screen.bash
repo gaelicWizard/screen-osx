@@ -1,7 +1,8 @@
 #!/bin/bash -c 'echo This file is meant to be sourced.'
 
 #export SCREENDIR="$(defaults read gnu.screen SCREENDIR 2>/dev/null)"
-mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=$HOME/.bash_sessions}"
+mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}bash_sessions}"
+readonly SHELL_SESSION_DIR
 
     # Instruct screen to place its sockets and other datas in ~, not /tmp
 #export SCREENDIR
@@ -23,12 +24,22 @@ function isappscreen ()
     fi 
 }
 
-function _set_screen_title_f ()
+function _screen_print_dcs_f ()
+{ # print "device control string" directly to the terminal emulator
+    if isscreen;
+    then
+        printf '\eP%s\e\\' "$@"
+    else
+        printf "$@"
+    fi
+}
+
+function _screen_set_title_f ()
 {
     printf "\ek${1:-}\e\\"
 }
 
-function _load_screen_environment_for_multiattach_f ()
+function _screen_load_environment_for_multiattach_f ()
 {
     local ENV CURRENV CURRTIME
 
@@ -58,10 +69,10 @@ then
         declare -F prompt_command_append >/dev/null || { echo "screen: Unable to manipulate prompt." 1>&2; return; }
         # import my prompt_commands package
 
-        prompt_command_append "_load_screen_environment_for_multiattach_f"
+        prompt_command_append "_screen_load_environment_for_multiattach_f"
         # Setup some code to synchronise environment from various concurent logins via multi-attached screen
 
-        prompt_command_append "_set_screen_title_f"
+        prompt_command_append "_screen_set_title_f"
         # Clear the screen title when displaying the prompt
         # this won't actually set a blank title, but it enables `shelltitle "\$ |$SHELL:"` dynamic titling
     fi
