@@ -2,7 +2,7 @@
 
 ###
 ## COPYRIGHT John Davidorff Pell
-## 9 December 2008
+## 2021-07-12
 ###
 
 ##
@@ -123,13 +123,13 @@ function _screen_set_title_f ()
 function _screen_load_environment_for_multiattach_f ()
 {
     local ENV CURRENV CURRTIME
-	local ENVIRONMENTSTACK="${SHELL_SESSION_DIR}/${STY:-}.environment_stack"
+    local ENVIRONMENTSTACK="${SHELL_SESSION_DIR}/${STY:-}.environment_stack"
 
-	if [ -r "${ENVIRONMENTSTACK}" ]
+    if [ -r "${ENVIRONMENTSTACK}" ]
     then 
         #CURRTIME=`date +%s`
     
-		ENV=( `< "${ENVIRONMENTSTACK}"` )
+        ENV=( `< "${ENVIRONMENTSTACK}"` )
         
         CURRENV="$((${#ENV[@]} -1))"
 
