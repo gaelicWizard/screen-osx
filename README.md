@@ -1,15 +1,11 @@
 # screenAppAttach.sh
 
 ## Installation
-    Double-click on SetupScreen.command and THAT'S IT!
-    
-    This will install three files in your home:
         ~/Tools/screenAppAttach.sh
-        ~/.rc.d/screen_app_rc
         ~/Library/LaunchAgents/gnu.screen.plist
-    Then, two preferences will be changed:
+    Then, two preferences need to be changed:
         com.apple.Terminal/Shell will be set to ~/Tools/screenAppAttach.sh
-        "source ~/.rc.d/screen_app_rc" will be added to the end of .bashrc
+        "source ~/Tools/screenAppAttach.sh" will be added to the end of .bashrc
 
 
 ## Background
