@@ -123,12 +123,13 @@ function _screen_set_title_f ()
 function _screen_load_environment_for_multiattach_f ()
 {
     local ENV CURRENV CURRTIME
+	local ENVIRONMENTSTACK="${SHELL_SESSION_DIR}/${STY:-}.environment_stack"
 
-    if [ -r "${SHELL_SESSION_DIR}/environment.${STY:-}" ]
+	if [ -r "${ENVIRONMENTSTACK}" ]
     then 
         #CURRTIME=`date +%s`
     
-        ENV=( `< "${SHELL_SESSION_DIR}/environment.${STY:-}"` )
+		ENV=( `< "${ENVIRONMENTSTACK}"` )
         
         CURRENV="$((${#ENV[@]} -1))"
 
