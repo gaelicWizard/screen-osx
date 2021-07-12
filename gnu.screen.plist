@@ -2,22 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>LimitLoadToSessionType</key>
-	<string>Background</string>
-	<key>KeepAlive</key>
-	<true/>
-	<key>Disabled</key>
-	<true/>
-	<key>EnableGlobbing</key>
-	<false/>
 	<key>Label</key>
 	<string>gnu.screen</string>
+	<key>ServiceDescription</key>
+	<string>GNU Screen</string>
 	<key>ProgramArguments</key>
 	<array>
 		<string>/bin/bash</string>
-		<string>-l</string>
-		<string>-c</string>
+		<string>-lc</string>
 		<string>exec screen -D -m -ln -fn -S gnu.screen</string>
 	</array>
+	<key>KeepAlive</key>
+	<true/>
 </dict>
 </plist>
