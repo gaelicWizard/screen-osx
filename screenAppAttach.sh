@@ -16,7 +16,7 @@ set -u
     # Set SCREENRC to the default location to ensure we can reference it properly
 : "${SCREENDIR:=}"
 
-mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}bash_sessions}"
+mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}screen_sessions}"
 readonly SHELL_SESSION_DIR
 
 if [ -n "${TERM_SESSION_ID:-}" ]
@@ -114,48 +114,6 @@ function find_sty ()
         # Bash sets the return value of a function to that of its last command
 }
 
-if [[ "${BASH_SOURCE[0]}" == "$0" ]]
-then
-
-##
-# If we've found the right session, then store environment and attach!
-##
-
-#TODO: fix Snow Leopard hack: ignore pre-existing sessions... 
-#if ! find_sty
-#then
-#    echo 'Unable to locate a suitable screen session!' "'find_sty' == ($?)"
-#    sleep 1
-#    exit 1
-#fi
-
-#TODO: fix Snow Leopard hack: set theSTY to gnu.screen
-theSTY="gnu.screen"
-
-trap environment_cleanup EXIT
-    # This script needs to cleanup after screen detaches.
-shopt -s huponexit
-    #  Screen should power-detach at a HUP signal, allowing us to continue.
-
-store_environment
-
-# Start screen
-screen -A -U -xRR -p + -S "${theSTY}"
-    # -A Adapt  the  sizes of all windows to the size of the current terminal
-    # -U tells screen(1) that the tty allows utf-8.
-    # -x selects an existing session
-    # -RR Really Reconnects (creating a new session if needed)
-        # allows a race between find_sty and here..., except with Snow Leopard hack (TODO: fix Snow Leopard hack)
-    # -p + creates and selects a new window (shell), on screen _above_ 4.0.3
-ret=$? # Save return value
-
-#environment_cleanup
-    # See function definition above
-##
-
-exit $ret
-else
-
 ## Screen
 function isscreen ()
 {
@@ -211,6 +169,47 @@ function _screen_load_environment_for_multiattach_f ()
 }
 ##
 
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]
+then # We are the executing script.
+
+##
+# If we've found the right session, then store environment and attach!
+##
+
+#TODO: fix Snow Leopard hack: ignore pre-existing sessions... 
+#if ! find_sty
+#then
+#    echo 'Unable to locate a suitable screen session!' "'find_sty' == ($?)"
+#    sleep 1
+#    exit 1
+#fi
+
+#TODO: fix Snow Leopard hack: set theSTY to gnu.screen
+theSTY="gnu.screen"
+
+trap environment_cleanup EXIT
+    # This script needs to cleanup after screen detaches.
+shopt -s huponexit
+    #  Screen should power-detach at a HUP signal, allowing us to continue.
+
+store_environment
+
+# Start screen
+screen -A -U -xRR -p + -S "${theSTY}"
+    # -A Adapt  the  sizes of all windows to the size of the current terminal
+    # -U tells screen(1) that the tty allows utf-8.
+    # -x selects an existing session
+    # -RR Really Reconnects (creating a new session if needed)
+        # allows a race between find_sty and here..., except with Snow Leopard hack (TODO: fix Snow Leopard hack)
+    # -p + creates and selects a new window (shell), on screen _above_ 4.0.3
+ret=$? # Save return value
+
+#environment_cleanup
+    # See function definition above
+##
+
+exit $ret
+else # We are being sourced from a shell.
 if isscreen
 then
     if isappscreen
@@ -228,4 +227,5 @@ then
 
     alias top="screen 20 top"
     alias su="screen su"
+fi
 fi
