@@ -12,14 +12,13 @@
 #set -e
 set -u
 
-: "${SCREENRC:=${XDG_CONFIG_HOME:-$HOME/.}${XDG_STATE_HOME:+/}screenrc}"
+: "${SCREENRC:=${XDG_CONFIG_HOME:-$HOME/.}${XDG_CONFIG_HOME:+/}screenrc}"
     # Set SCREENRC to the default location to ensure we can reference it properly
-: "${SCREENDIR:=}"
 
 mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}screen_sessions}"
 readonly SHELL_SESSION_DIR
 
-if [ -n "${TERM_SESSION_ID:-}" ]
+if [ -n "${TERM_SESSION_ID:=${WINDOWID:-}}" ]
 then
     export SHELL_SESSION_DID_INIT=1 SHELL_SESSIONS_DISABLE=1
         # Inform Apple Terminal that we do our own sessions.
