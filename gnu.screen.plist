@@ -8,10 +8,19 @@
 	<string>GNU Screen</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/bin/bash</string>
-		<string>-lc</string>
-		<string>exec screen -D -m -ln -fn -S gnu.screen</string>
+		<string>/usr/bin/screen</string>
+		<string>-D</string>
+		<string>-m</string>
+		<string>-ln</string>
+		<string>-fn</string>
+		<string>-S</string>
+		<string>gnu.screen</string>
 	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>SCREENRC</key>
+		<string>/Users/pellican/Library/Preferences/screen/screenrc</string>
+	</dict>
 	<key>KeepAlive</key>
 	<true/>
 </dict>
