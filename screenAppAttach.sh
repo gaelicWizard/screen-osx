@@ -9,8 +9,11 @@
 # Be strict
 ##
 
-#set -e
-set -u
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]
+then # We are not being sourced inside a shell instance.
+	#set -e # Script dies if any execution failure is unhandled.
+	set -u # Script dies if any undefined parameter is referenced.
+fi
 
 : "${SCREENRC:=${XDG_CONFIG_HOME:-$HOME/.}${XDG_CONFIG_HOME:+/}screenrc}"
 	# Set SCREENRC to the default location to ensure we can reference it properly
@@ -219,7 +222,6 @@ ret=$? # Save return value
 exit $ret
 
 else # We are being sourced from a shell.
-set +u # to balance the top
 if isscreen
 then
 	if isappscreen
