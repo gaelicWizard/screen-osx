@@ -20,6 +20,8 @@
 	<dict>
 		<key>SCREENRC</key>
 		<string>/Users/pellican/Library/Preferences/screen/screenrc</string>
+		<key>TERMINFO</key>
+		<string>/usr/local/opt/ncurses/share/terminfo</string>
 	</dict>
 	<key>KeepAlive</key>
 	<true/>
