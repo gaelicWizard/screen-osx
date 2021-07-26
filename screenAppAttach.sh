@@ -224,10 +224,10 @@ if isscreen
 then
 	if isappscreen
 	then
-		prompt_command_append "_screen_load_environment_for_multiattach_f"
+		safe_append_prompt_command "_screen_load_environment_for_multiattach_f" || { echo "screenAppAttach.sh: Unable to manipulate prompt." 1>&2; return; }
 		# Setup some code to synchronise environment from various concurent logins via multi-attached screen
 
-		prompt_command_append "_screen_set_title_f"
+		safe_append_prompt_command "_screen_set_title_f" || { echo "screenAppAttach.sh: Unable to manipulate prompt." 1>&2; return; }
 		# Clear the screen title when displaying the prompt
 		# this won't actually set a blank title, but it enables `shelltitle "\$ |$SHELL:"` dynamic titling
 	fi
