@@ -24,6 +24,50 @@ then
         # Inform Apple Terminal that we do our own sessions.
 fi
 
+
+##
+#
+function slogin () 
+{
+    # slogin() is meant to start a new login shell on a remote host,
+    #  so it will run the slogin command (ssh) and run screen on the
+    #  remote host. If we're running within screen(1), then open a
+    #  new window.
+    
+    local i TITLE SCREENPID SCREENCLI SCREEN_CLI SCREEN_COMMAND
+    
+    local SCREEN_COMMAND_DEFAULT="screen -A -U -xRR -p + -S gnu.screen"
+
+    if declare -F isscreen >/dev/null && isscreen
+    then
+        # The last word on the command line is the host name,
+        #  since this slogin() function does run a remote command
+        #  and the remote command follows the host name immediately.
+        for i in "$@"
+        do
+            # $# == argc
+            TITLE="$i"
+            # This is a hack to get the last word on the command line
+            #TODO:FIXME: Just get the last word. 
+        done
+
+        SCREENPID="${STY%%.*}"
+        SCREENCLI="$(ps -xo pid,command | fgrep "${SCREENPID:=$$}" | fgrep -v fgrep)"
+        SCREEN_CLI="${SCREENCLI## }" # remove whitespace...?
+        SCREEN_COMMAND="${SCREEN_CLI/#${SCREENPID} SCREEN/screen}"
+            # Get the command line of the running screen session to use as the command line for the remote.
+			# this don't work due to starting screen in the background with -Dm...
+
+        screen -t "$TITLE" slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
+    else
+        command slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
+    fi
+        # Note that both the entire ${SHELL… expression and the screen(1) expression are single-quoted, so that the local shell does not evaluate them.
+        # This should run (1) if screen is available, a new screen window entitled with the hostname; (2) ssh, told to allocate a tty; (3) _exec_ the shell with --login, so as to ensure that screen(1) is run within a proper login shell, and so as to avoid a heirarchy of useless ${SHELL}s; (4) _exec_ screen told to re-attach, violently if necessary, but with minimal violence, again so as to avoid a heirarchy of useless ${SHELL}s.
+}
+##
+
+
 ##
 # store_environment stores selected variables from the pre-attach environment
 # Sets global SHELL_SESSION_FILE
@@ -162,11 +206,11 @@ store_environment
 
 # Start screen
 screen -A -U -xRR -p + -S "${theSTY}"
-    # -A Adapt  the  sizes of all windows to the size of the current terminal
-    # -U tells screen(1) that the tty allows utf-8.
-    # -x selects an existing session
-    # -RR Really Reconnects (creating a new session if needed)
-    # -p + creates and selects a new window (shell), on screen _above_ 4.0.3
+    # -A Adapt the sizes of all windows to the size of the current terminal.
+    # -U tell screen(1) that the tty allows utf-8.
+    # -x select an existing session.
+    # -RR Really Reconnect (creating a new session if needed).
+    # -p + create and select a new window (shell), on screen _above_ 4.0.3.
 ret=$? # Save return value
 
 #environment_cleanup
@@ -175,6 +219,7 @@ ret=$? # Save return value
 exit $ret
 
 else # We are being sourced from a shell.
+set +u # to balance the top
 if isscreen
 then
     if isappscreen
