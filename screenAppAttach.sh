@@ -39,7 +39,7 @@ function slogin ()
 
 	local i TITLE SCREENPID SCREENCLI SCREEN_CLI SCREEN_COMMAND
 
-	local SCREEN_COMMAND_DEFAULT="screen -A -U -xRR -p + -S gnu.screen"
+	local SCREEN_COMMAND_DEFAULT="screen -A -U -xRR -e^Aa -p + -S gnu.screen"
 
 	if declare -F isscreen >/dev/null && isscreen
 	then
