@@ -5,7 +5,13 @@
 	<key>Label</key>
 	<string>gnu.screen</string>
 	<key>ServiceDescription</key>
-	<string>GNU Screen</string>
+	<string>GNU Screen ($Id$)</string>
+	<key>RunAtLoad</key>
+	<false/>
+	<key>Program</key>
+	<string>/usr/bin/screen</string>
+	<key>StartInterval</key>
+	<integer>2</integer>
 	<key>ProgramArguments</key>
 	<array>
 		<string>/usr/bin/screen</string>
@@ -24,6 +30,9 @@
 		<string>/usr/local/opt/ncurses/share/terminfo</string>
 	</dict>
 	<key>KeepAlive</key>
-	<true/>
+	<dict>
+		<key>Crashed</key>
+		<false/>
+	</dict>
 </dict>
 </plist>
