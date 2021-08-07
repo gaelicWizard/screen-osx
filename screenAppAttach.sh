@@ -10,8 +10,8 @@
 ##
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]
-then # We are not being sourced inside a shell instance.
-	#set -e # Script dies if any execution failure is unhandled.
+then # We are *not* being sourced inside a shell instance.
+	set -e # Script dies if any execution failure is unhandled.
 	set -u # Script dies if any undefined parameter is referenced.
 fi
 
@@ -208,6 +208,8 @@ shopt -s huponexit
 store_environment
 
 # Start screen
+launchctl start gnu.screen || : "Job not found..."
+# Attach screen
 screen -A -U -xRR -p + -S "${theSTY}"
 	# -A Adapt the sizes of all windows to the size of the current terminal.
 	# -U tell screen(1) that the tty allows utf-8.
