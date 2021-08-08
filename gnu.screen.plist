@@ -11,7 +11,7 @@
 	<key>Program</key>
 	<string>/usr/bin/screen</string>
 	<key>StartInterval</key>
-	<integer>2</integer>
+	<integer>10</integer>
 	<key>ProgramArguments</key>
 	<array>
 		<string>/usr/bin/screen</string>
