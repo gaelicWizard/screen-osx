@@ -212,9 +212,14 @@ shopt -s huponexit
 store_environment
 
 # Start screen
-launchctl start gnu.screen || : "Job not found..."
+if launchctl start gnu.screen
+then # Try to account for hard-coded binary location (and version)
+	SCREEN_EXE=/usr/bin/screen
+else
+	 : "Job not found..."
+fi
 # Attach screen
-screen -A -U -xRR -p + -S "${theSTY}"
+"${SCREEN_EXE:-screen}" -A -U -xRR -p + -S "${theSTY}"
 	# -A Adapt the sizes of all windows to the size of the current terminal.
 	# -U tell screen(1) that the tty allows utf-8.
 	# -x select an existing session.
