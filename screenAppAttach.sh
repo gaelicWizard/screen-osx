@@ -13,18 +13,7 @@ if [[ "${BASH_SOURCE[0]}" == "$0" ]]
 then # We are *not* being sourced inside a shell instance.
 	set -e # Script dies if any execution failure is unhandled.
 	set -u # Script dies if any undefined parameter is referenced.
-fi
-
-: "${SCREENRC:=${XDG_CONFIG_HOME:-$HOME/.}${XDG_CONFIG_HOME:+/}screenrc}"
-	# Set SCREENRC to the default location to ensure we can reference it properly
-
-mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}screen_sessions}"
-readonly SHELL_SESSION_DIR
-
-if [ -n "${TERM_SESSION_ID:=${WINDOWID:-}}" ]
-then
-	export SHELL_SESSION_DID_INIT=1 SHELL_SESSIONS_DISABLE=1
-		# Inform Apple Terminal that we do our own sessions.
+	shopt -so pipefail # command pipeline fails if *any* command fails
 fi
 
 
@@ -190,6 +179,21 @@ function _screen_load_environment_for_multiattach_f ()
 	fi
 }
 ##
+
+: "${SCREENDIR:=${TMPDIR:-$HOME}/.screen}"
+	# Set SCREENDIR to $TMPDIR/.screen, which seems to be the default in Apple's version. (Default from upstream is /tmp/uscreens/S-$LOGNAME .)
+: "${SCREENRC:=${XDG_CONFIG_HOME:-$HOME/.}${XDG_CONFIG_HOME:+/}screenrc}"
+	# Set SCREENRC to the default location to ensure we can reference it properly
+export SCREENDIR SCREENRC
+
+mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}screen_sessions}"
+readonly SHELL_SESSION_DIR
+
+if [ -n "${TERM_SESSION_ID:=${WINDOWID:-}}" ]
+then
+	export SHELL_SESSION_DID_INIT=1 SHELL_SESSIONS_DISABLE=1
+		# Inform Apple Terminal that we do our own sessions.
+fi
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]
 then # We are the executing script.
