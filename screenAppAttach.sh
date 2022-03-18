@@ -112,7 +112,7 @@ function environment_cleanup ()
 		# Don't use any functions/aliases
 		# Don't prompt
 	
-	if [ "$(uniq "$ENVIRONMENTSTACK")" == " " ]
+	if [[ "$(uniq "$ENVIRONMENTSTACK")" == [[:space:]] ]]
 		# If the stack file consists of entirely blank lines, then delete it
 	then
 		command rm -f "$ENVIRONMENTSTACK"
@@ -122,7 +122,7 @@ function environment_cleanup ()
 ## Screen
 function isscreen ()
 {
-	if [ -n "${STY:-}" ]
+	if [[ -n "${STY:-}" ]]
 		then return 0;
 		else return 1;
 	fi
@@ -130,7 +130,7 @@ function isscreen ()
 
 function isappscreen ()
 {
-	if echo "${STY:-}" | grep 'gnu.screen' >/dev/null
+	if grep -q 'gnu.screen' <<< "${STY:-}"
 		then return 0
 		else return 1
 	fi 
@@ -156,7 +156,7 @@ function _screen_load_environment_for_multiattach_f ()
 	local ENV CURRENV CURRTIME
 	local ENVIRONMENTSTACK="${SHELL_SESSION_DIR}/${STY:-}.environment_stack"
 
-	if [ -r "${ENVIRONMENTSTACK}" ]
+	if [[ -r "${ENVIRONMENTSTACK}" ]]
 	then 
 		#CURRTIME=`date +%s`
 	
@@ -164,9 +164,9 @@ function _screen_load_environment_for_multiattach_f ()
 		
 		CURRENV="$((${#ENV[@]} -1))"
 
-		[ "$CURRENV" -lt 0 ] && return
+		[[ "$CURRENV" -lt 0 ]] && return
 	
-		if [ -f "${ENV[$CURRENV]}" ]; then
+		if [[ -f "${ENV[$CURRENV]}" ]]; then
 			#eval unset "${SCREEN_ENV_VARIABLES[@]}"
 			unset SCREEN LANG DISPLAY SSH_AUTH_SOCK SSH_CLIENT SSH_CONNECTION
 			. "${ENV[$CURRENV]}"
@@ -184,7 +184,7 @@ export SCREENDIR SCREENRC
 mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}screen_sessions}"
 readonly SHELL_SESSION_DIR
 
-if [ -n "${TERM_SESSION_ID:=${WINDOWID:-}}" ]
+if [[ -n "${TERM_SESSION_ID:=${WINDOWID:-}}" ]]
 then
 	export SHELL_SESSION_DID_INIT=1 SHELL_SESSIONS_DISABLE=1
 		# Inform Apple Terminal that we do our own sessions.
@@ -214,7 +214,7 @@ else
 	 : "Job not found..."
 fi
 # Attach screen
-"${SCREEN_EXE:-screen}" -A -U -xRR -p + -S "${theSTY}"
+"${SCREEN_EXE[@]:-screen}" -A -U -xRR -p + -S "${theSTY}"
 	# -A Adapt the sizes of all windows to the size of the current terminal.
 	# -U tell screen(1) that the tty allows utf-8.
 	# -x select an existing session.
