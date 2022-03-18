@@ -14,6 +14,7 @@ then # We are *not* being sourced inside a shell instance.
 	set -e # Script dies if any execution failure is unhandled.
 	set -u # Script dies if any undefined parameter is referenced.
 	shopt -so pipefail # command pipeline fails if *any* command fails
+	trap '' PIPE # avoid some `pipefail` weirds
 fi
 
 
