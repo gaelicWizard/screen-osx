@@ -27,7 +27,7 @@ function slogin ()
 	#  remote host. If we're running within screen(1), then open a
 	#  new window.
 
-	local i TITLE SCREENPID SCREENCLI SCREEN_CLI SCREEN_COMMAND
+	local TITLE SCREENPID SCREENCLI SCREEN_CLI SCREEN_COMMAND
 
 	local SCREEN_COMMAND_DEFAULT="screen -A -U -xRR -e^Aa -p + -S gnu.screen"
 
@@ -36,13 +36,7 @@ function slogin ()
 		# The last word on the command line is the host name,
 		#  since this slogin() function does run a remote command
 		#  and the remote command follows the host name immediately.
-		for i in "$@"
-		do
-			# $# == argc
-			TITLE="$i"
-			# This is a hack to get the last word on the command line
-			#TODO:FIXME: Just get the last word. 
-		done
+		TITLE="${!#}"
 
 		SCREENPID="${STY%%.*}"
 		SCREENCLI="$(ps -xo pid,command | fgrep "${SCREENPID:=$$}" | fgrep -v fgrep)"
