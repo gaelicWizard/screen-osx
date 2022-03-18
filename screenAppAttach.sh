@@ -164,7 +164,8 @@ function _screen_load_environment_for_multiattach_f ()
 	then 
 		#CURRTIME=${EPOCHSECONDS:-$(date +%s)}
 	
-		ENV=( `< "${ENVIRONMENTSTACK}"` )
+		IFS=$'\n' read -d '' -r -a ENV < "${ENVIRONMENTSTACK}"
+		#ENV=( `< "${ENVIRONMENTSTACK}"` )
 		
 		CURRENV="$((${#ENV[@]} -1))"
 
