@@ -46,7 +46,10 @@ function slogin ()
 			# Get the command line of the running screen session to use as the command line for the remote.
 			# this don't work due to starting screen in the background with -Dm...
 
-		screen -t "$TITLE" slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
+		(
+			cd "${HOME?}" && exec \
+			screen -t "$TITLE" slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
+		)
 	else
 		command slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
 	fi
