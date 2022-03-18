@@ -78,7 +78,7 @@ function store_environment ()
 	##
 	# Store incoming environment information into the file just created, for use inside screen by `_screen_load_environment_for_multiattach_f`
 	##
-	echo "LOGGED_IN=\"`date`\"" >> "${SHELL_SESSION_FILE}"
+	echo "LOGGED_IN=\"$(date)\"" >> "${SHELL_SESSION_FILE}"
 		# When did I log in (this time)?
 
 	echo "screen -qX setenv SCREEN \"${TERM:-}\";export SCREEN=\"${TERM:-}\"" >> "${SHELL_SESSION_FILE}"
@@ -89,7 +89,7 @@ function store_environment ()
 	echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\"" >> "${SHELL_SESSION_FILE}"
 	
 
-	echo "export LOGGTIME=\"`date +%s`\"" >> "${SHELL_SESSION_FILE}"
+	echo "export LOGGTIME=\"${EPOCHSECONDS:-$(date +%s)}\"" >> "${SHELL_SESSION_FILE}"
 		# Add the creation time of this file
 	##
 
@@ -146,23 +146,23 @@ function _screen_print_dcs_f ()
 	then
 		printf '\eP%s\e\\' "$@"
 	else
-		printf "$@"
+		printf '%s' "$@"
 	fi
 }
 
 function _screen_set_title_f ()
 {
-	printf "\ek${1:-}\e\\"
+	printf '\ek%s\e\\' "${1:-}"
 }
 
 function _screen_load_environment_for_multiattach_f ()
 {
-	local ENV CURRENV CURRTIME
+	local ENV CURRENV #CURRTIME
 	local ENVIRONMENTSTACK="${SHELL_SESSION_DIR}/${STY:-}.environment_stack"
 
 	if [[ -r "${ENVIRONMENTSTACK}" ]]
 	then 
-		#CURRTIME=`date +%s`
+		#CURRTIME=${EPOCHSECONDS:-$(date +%s)}
 	
 		ENV=( `< "${ENVIRONMENTSTACK}"` )
 		
@@ -229,7 +229,7 @@ ret=$? # Save return value
 #environment_cleanup
 	# See function definition above
 ##
-exit $ret
+exit "${ret}"
 
 else # We are being sourced from a shell.
 if isscreen
