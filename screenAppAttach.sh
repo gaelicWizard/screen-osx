@@ -215,7 +215,10 @@ store_environment
 if launchctl start gnu.screen
 then # Try to account for hard-coded binary location (and version)
 	SCREEN_EXE=/usr/bin/screen
-  sleep 1
+  while ! compgen -G "${SCREENDIR}/*"
+  do # wait for SCREEN to create the socket
+    sleep 0.1 || break; 
+  done
 else
 	 : "Job not found..."
 fi
