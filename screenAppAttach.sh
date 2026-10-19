@@ -180,7 +180,7 @@ function _screen_load_environment_for_multiattach_f ()
 }
 ##
 
-: "${SCREENDIR:=${TMPDIR:-$HOME}/.screen}"
+: "${SCREENDIR:=${TMPDIR:-$HOME/}.screen}"
 	# Set SCREENDIR to $TMPDIR/.screen, which seems to be the default in Apple's version. (Default from upstream is /tmp/uscreens/S-$LOGNAME .)
 : "${SCREENRC:=${XDG_CONFIG_HOME:-$HOME/.}${XDG_CONFIG_HOME:+/}screenrc}"
 	# Set SCREENRC to the default location to ensure we can reference it properly
