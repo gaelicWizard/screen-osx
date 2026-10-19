@@ -17,22 +17,29 @@
 		<string>/usr/bin/screen</string>
 		<string>-D</string>
 		<string>-m</string>
-		<string>-ln</string>
-		<string>-fn</string>
+		<!--<string>-ln</string>--><!-- MacOS has patched screen to do the login shell in the most worst way possible -->
+		<string>-fn</string><!-- disable flow control -->
+		<string>-U</string><!-- inform screen of UTF-8 -->
 		<string>-S</string>
 		<string>gnu.screen</string>
 	</array>
+  <key>EnableGlobbing</key>
+  <true/><!-- faulty attempt to use ~ in path to screenrc -->
 	<key>EnvironmentVariables</key>
 	<dict>
-		<key>SCREENRC</key>
-		<string>/Users/pellican/Library/Preferences/screen/screenrc</string>
-		<key>TERMINFO</key>
-		<string>/usr/local/opt/ncurses/share/terminfo</string>
+		<key>SCREENRC</key><!-- how to make this use ~ instead of hard-coding my user name????? -->
+		<string>/Users/pellican/Library/Preferences/screenrc</string>
+		<key>TERMINFO</key><!-- try to use a newer terminfo database, if available -->
+		<string>/opt/homebrew/opt/ncurses/share/terminfo</string>
+		<key>LC_CTYPE</key><!-- Linux and newer MacOS have 'C.UTF-8', HP/UX has 'utf8', and older MacOS has 'UTF-8' specifically for LC_CTYPE. -->
+		<string>C.UTF-8</string><!-- inform children of UTF-8. -->
+    <key>SHELL_SESSION_DID_INIT</key>
+    <string>1</string><!-- inform Apple Terminal that we have "already" initialized shell session management -->
 	</dict>
-	<key>KeepAlive</key>
+	<!--<key>KeepAlive</key>
 	<dict>
 		<key>Crashed</key>
 		<false/>
-	</dict>
+	</dict>-->
 </dict>
 </plist>
