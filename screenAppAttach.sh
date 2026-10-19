@@ -215,6 +215,7 @@ store_environment
 if launchctl start gnu.screen
 then # Try to account for hard-coded binary location (and version)
 	SCREEN_EXE=/usr/bin/screen
+  sleep 1
 else
 	 : "Job not found..."
 fi
