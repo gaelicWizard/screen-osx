@@ -1,4 +1,7 @@
-#!/bin/bash --login
+#!/bin/bash -leuo pipefail
+# default Mac OS X /etc/profile unconditionally calls /etc/bashrc which checks [ -z $PS1 ],
+#  which prints an error message that PS1 is unbound (because it is not an interactive shell).
+# We are deliberately starting a login shell, so login-but-not-interactive is admittedly uncommon.
 
 ###
 ## COPYRIGHT John Davidorff Pell
