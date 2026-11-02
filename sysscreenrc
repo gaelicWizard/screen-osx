@@ -1,0 +1,26 @@
+##
+# SYSSCREENRC - system default configuration (as opposed to the user's ~/.screenrc)
+##
+# Targetted for GNU Screen 4.00.03 (FAU), released 23 October 2006. That's over twenty years old at this point.
+# 
+# Configure this ancient release as best as possible to reflect modern requirements circa 2006. E.g., UTF-8.
+#
+##
+
+
+# Force UTF-8 capabilities for this older version
+defutf8 on
+utf8 on on
+
+# Map standard VT100 alternate character sets safely
+defencoding UTF-8
+encoding utf8 utf8
+
+# Disable high-bit control characters, which directly conflict with UTF-8 between 0x80 and 0x9F.
+defc1 off
+
+# Explicitly use standard screen terminal emulation
+term screen
+
+# patch the alternate character set
+termcapinfo nsterm* vt@:as=\E(0:ae=\E(-:ac=``aaffggjjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}~~
