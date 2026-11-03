@@ -183,7 +183,8 @@ function _screen_load_environment_for_multiattach_f()
 		then
 			#eval unset "${SCREEN_ENV_VARIABLES[@]}"
 			unset SCREEN LANG DISPLAY SSH_AUTH_SOCK SSH_CLIENT SSH_CONNECTION
-			. "${ENV[$CURRENV]}"
+			# shellcheck disable=SC1090
+			source "${ENV[$CURRENV]}"
 		fi
 	fi
 }
