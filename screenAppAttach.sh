@@ -146,9 +146,11 @@ function isappscreen()
 
 function _screen_print_dcs_f()
 { # print "device control string" directly to the terminal emulator
+	# shellcheck disable=SC1003
+	local DCS=$'\eP' ST=$'\e\\'
 	if isscreen
 	then
-		printf '\eP%s\e\\' "$@"
+		printf "${DCS}%s${ST}" "$@"
 	else
 		printf '%s' "$@"
 	fi
@@ -156,7 +158,9 @@ function _screen_print_dcs_f()
 
 function _screen_set_title_f()
 {
-	printf '\ek%s\e\\' "${1:-}"
+	# shellcheck disable=SC1003
+	local TDS=$'\ek' ST=$'\e\\'
+	printf "${TDS}%s${ST}" "${1:-}"
 }
 
 function _screen_load_environment_for_multiattach_f()
