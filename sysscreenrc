@@ -1,6 +1,7 @@
 ##
 # SYSSCREENRC - system default configuration (as opposed to the user's ~/.screenrc)
 ##
+#
 # Targetted for GNU Screen 4.00.03 (FAU), released 23 October 2006. That's over twenty years old at this point.
 # 
 # Configure this ancient release as best as possible to reflect modern requirements circa 2006. E.g., UTF-8.
@@ -23,4 +24,7 @@ defc1 off
 term screen
 
 # patch the alternate character set
-termcapinfo nsterm* vt@:as=\E(0:ae=\E(-:ac=``aaffggjjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}~~
+termcapinfo nsterm*|xterm*|rxvt*|gnome-terminal|konsole|zvt|dtterm|kterm|Eterm|zterm vt@:as=\E(0:ae=\E(-:ac=``aaffggjjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}~~
+
+# relocate to $HOME since launchd starts us in / (root)
+chdir
