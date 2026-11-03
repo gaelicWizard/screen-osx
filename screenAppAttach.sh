@@ -48,11 +48,12 @@ function slogin()
 		# Get the command line of the running screen session to use as the command line for the remote.
 		# this don't work due to starting screen in the background with -Dm...
 
-		(
+		( # shellcheck disable=SC2016
 			cd "${HOME?}" && exec \
 				screen -t "$TITLE" slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
 		)
 	else
+		 # shellcheck disable=SC2016
 		command slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
 	fi
 	# Note that both the entire ${SHELL… expression and the screen(1) expression are single-quoted, so that the local shell does not evaluate them.
