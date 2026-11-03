@@ -74,7 +74,7 @@ function store_environment ()
 	# Create a new, randomly named, file to store the environment for this session
 	##
 
-	SHELL_SESSION_FILE="$(mktemp "${SHELL_SESSION_DIR}/session.XXXXXX")"
+	SHELL_SESSION_FILE="$(mktemp "${SHELL_SESSION_DIR?}/session.XXXXXX")"
 	##
 	
 	
@@ -98,7 +98,7 @@ function store_environment ()
 
 	ENVIRONMENTSTACK="${SHELL_SESSION_DIR}/${theSTY}.environment_stack"
 
-	echo " ${SHELL_SESSION_FILE}" >> "$ENVIRONMENTSTACK"
+	echo " ${SHELL_SESSION_FILE}" >> "${ENVIRONMENTSTACK}"
 		# Add this new environment file to the top of the environment stack
 }
 
@@ -110,19 +110,19 @@ function store_environment ()
 ##
 function environment_cleanup ()
 {
-	perl -pi -e 's;'"${SHELL_SESSION_FILE}"';;g' "$ENVIRONMENTSTACK"
+	perl -pi -e 's;'"${SHELL_SESSION_FILE?}"';;g' "${ENVIRONMENTSTACK?}"
 		# Remove the current environment file from the stack
 		# Note, it may not be the top of the stack
 
-	command rm -f "${SHELL_SESSION_FILE}"
+	command rm -f "${SHELL_SESSION_FILE?}"
 		# Delete the environment file for this session, since we're done
 		# Don't use any functions/aliases
 		# Don't prompt
 	
-	if [[ "$(uniq "$ENVIRONMENTSTACK")" == [[:space:]] ]]
+	if [[ "$(uniq "${ENVIRONMENTSTACK?}")" == [[:space:]] ]]
 		# If the stack file consists of entirely blank lines, then delete it
 	then
-		command rm -f "$ENVIRONMENTSTACK"
+		command rm -f "${ENVIRONMENTSTACK?}"
 	fi
 }
 
@@ -137,7 +137,7 @@ function isscreen ()
 
 function isappscreen ()
 {
-	if grep -q 'gnu.screen' <<< "${STY:-}"
+	if [[ "${STY:-}" == *gnu.screen* ]]
 		then return 0
 		else return 1
 	fi 
@@ -161,7 +161,7 @@ function _screen_set_title_f ()
 function _screen_load_environment_for_multiattach_f ()
 {
 	local ENV CURRENV #CURRTIME
-	local ENVIRONMENTSTACK="${SHELL_SESSION_DIR}/${STY:-}.environment_stack"
+	local ENVIRONMENTSTACK="${SHELL_SESSION_DIR?}/${STY:-}.environment_stack"
 
 	if [[ -r "${ENVIRONMENTSTACK}" ]]
 	then 
@@ -255,4 +255,4 @@ then
 	alias top="screen 20 top"
 	alias su="screen sudo su -l"
 fi
-fi
+fi # script or source'd
