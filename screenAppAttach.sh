@@ -196,6 +196,7 @@ function _screen_load_environment_for_multiattach_f()
 # Set SCREENRC to the default location to ensure we can reference it properly
 export SCREENDIR SCREENRC
 
+#shellcheck disable=SC2174
 mkdir -p -m u+rwX,go-rwx "${SHELL_SESSION_DIR:=${XDG_STATE_HOME:-$HOME/.}${XDG_STATE_HOME:+/}screen_sessions}"
 readonly SHELL_SESSION_DIR
 
