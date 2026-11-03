@@ -48,12 +48,12 @@ function slogin()
 		# Get the command line of the running screen session to use as the command line for the remote.
 		# this don't work due to starting screen in the background with -Dm...
 
-		( # shellcheck disable=SC2016
+		( #shellcheck disable=SC2016
 			cd "${HOME?}" && exec \
 				screen -t "$TITLE" slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
 		)
 	else
-		 # shellcheck disable=SC2016
+		#shellcheck disable=SC2016
 		command slogin -t "$@" exec '"${SHELL:-/bin/bash}"' --login -c '"exec '"${SCREEN_COMMAND_DEFAULT}"'"'
 	fi
 	# Note that both the entire ${SHELL… expression and the screen(1) expression are single-quoted, so that the local shell does not evaluate them.
@@ -146,7 +146,7 @@ function isappscreen()
 
 function _screen_print_dcs_f()
 { # print "device control string" directly to the terminal emulator
-	# shellcheck disable=SC1003
+	#shellcheck disable=SC1003
 	local DCS=$'\eP' ST=$'\e\\'
 	if isscreen
 	then
@@ -158,7 +158,7 @@ function _screen_print_dcs_f()
 
 function _screen_set_title_f()
 {
-	# shellcheck disable=SC1003
+	#shellcheck disable=SC1003
 	local TDS=$'\ek' ST=$'\e\\'
 	printf "${TDS}%s${ST}" "${1:-}"
 }
@@ -183,7 +183,7 @@ function _screen_load_environment_for_multiattach_f()
 		then
 			#eval unset "${SCREEN_ENV_VARIABLES[@]}"
 			unset SCREEN LANG DISPLAY SSH_AUTH_SOCK SSH_CLIENT SSH_CONNECTION
-			# shellcheck disable=SC1090
+			#shellcheck disable=SC1090
 			source "${ENV[$CURRENV]}"
 		fi
 	fi
