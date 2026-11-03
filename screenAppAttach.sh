@@ -78,18 +78,20 @@ function store_environment()
 	##
 	# Store incoming environment information into the file just created, for use inside screen by `_screen_load_environment_for_multiattach_f`
 	##
-	echo "LOGGED_IN=\"$(date)\"" >>"${SHELL_SESSION_FILE}"
-	# When did I log in (this time)?
+	{
+		echo "LOGGED_IN=\"$(date)\"" >>"${SHELL_SESSION_FILE}"
+		# When did I log in (this time)?
 
-	echo "screen -qX setenv SCREEN \"${TERM:-}\";export SCREEN=\"${TERM:-}\"" >>"${SHELL_SESSION_FILE}"
-	echo "screen -qX setenv LANG \"${LANG:-}\";export LANG=\"${LANG:-}\"" >>"${SHELL_SESSION_FILE}"
-	echo "screen -qX setenv DISPLAY \"${DISPLAY:-}\";export DISPLAY=\"${DISPLAY:-}\"" >>"${SHELL_SESSION_FILE}"
-	echo "screen -qX setenv SSH_AUTH_SOCK \"${SSH_AUTH_SOCK:-}\";export SSH_AUTH_SOCK=\"${SSH_AUTH_SOCK:-}\"" >>"${SHELL_SESSION_FILE}"
-	echo "screen -qX setenv SSH_CONNECTION \"${SSH_CONNECTION:-}\";export SSH_CONNECTION=\"${SSH_CONNECTION:-}\"" >>"${SHELL_SESSION_FILE}"
-	echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\"" >>"${SHELL_SESSION_FILE}"
+		echo "screen -qX setenv SCREEN \"${TERM:-}\";export SCREEN=\"${TERM:-}\""
+		echo "screen -qX setenv LANG \"${LANG:-}\";export LANG=\"${LANG:-}\""
+		echo "screen -qX setenv DISPLAY \"${DISPLAY:-}\";export DISPLAY=\"${DISPLAY:-}\""
+		echo "screen -qX setenv SSH_AUTH_SOCK \"${SSH_AUTH_SOCK:-}\";export SSH_AUTH_SOCK=\"${SSH_AUTH_SOCK:-}\""
+		echo "screen -qX setenv SSH_CONNECTION \"${SSH_CONNECTION:-}\";export SSH_CONNECTION=\"${SSH_CONNECTION:-}\""
+		echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\""
 
-	echo "export LOGGTIME=\"${EPOCHSECONDS:-$(date +%s)}\"" >>"${SHELL_SESSION_FILE}"
-	# Add the creation time of this file
+		echo "export LOGGTIME=\"${EPOCHSECONDS:-$(date +%s)}\""
+		# Add the creation time of this file
+	} >>"${SHELL_SESSION_FILE}"
 	##
 
 	ENVIRONMENTSTACK="${SHELL_SESSION_DIR}/${theSTY}.environment_stack"
