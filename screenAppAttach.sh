@@ -23,14 +23,14 @@ fi
 
 ##
 #
-function slogin () 
+function slogin ()
 {
 	# slogin() is meant to start a new login shell on a remote host,
 	#  so it will run the slogin command (ssh) and run screen on the
 	#  remote host. If we're running within screen(1), then open a
 	#  new window.
 
-	local TITLE 
+	local TITLE
 	#local SCREENPID SCREENCLI SCREEN_CLI SCREEN_COMMAND
 
 	local SCREEN_COMMAND_DEFAULT="screen -A -U -xRR -e^Aa -p + -S gnu.screen"
@@ -76,8 +76,8 @@ function store_environment ()
 
 	SHELL_SESSION_FILE="$(mktemp "${SHELL_SESSION_DIR?}/session.XXXXXX")"
 	##
-	
-	
+
+
 	##
 	# Store incoming environment information into the file just created, for use inside screen by `_screen_load_environment_for_multiattach_f`
 	##
@@ -90,7 +90,7 @@ function store_environment ()
 	echo "screen -qX setenv SSH_AUTH_SOCK \"${SSH_AUTH_SOCK:-}\";export SSH_AUTH_SOCK=\"${SSH_AUTH_SOCK:-}\"" >> "${SHELL_SESSION_FILE}"
 	echo "screen -qX setenv SSH_CONNECTION \"${SSH_CONNECTION:-}\";export SSH_CONNECTION=\"${SSH_CONNECTION:-}\"" >> "${SHELL_SESSION_FILE}"
 	echo "screen -qX setenv TERM_SESSION_ID \"${TERM_SESSION_ID:-}\";export TERM_SESSION_ID=\"${TERM_SESSION_ID:-}\"" >> "${SHELL_SESSION_FILE}"
-	
+
 
 	echo "export LOGGTIME=\"${EPOCHSECONDS:-$(date +%s)}\"" >> "${SHELL_SESSION_FILE}"
 		# Add the creation time of this file
@@ -118,7 +118,7 @@ function environment_cleanup ()
 		# Delete the environment file for this session, since we're done
 		# Don't use any functions/aliases
 		# Don't prompt
-	
+
 	if [[ "$(uniq "${ENVIRONMENTSTACK?}")" == [[:space:]] ]]
 		# If the stack file consists of entirely blank lines, then delete it
 	then
@@ -140,7 +140,7 @@ function isappscreen ()
 	if [[ "${STY:-}" == *gnu.screen* ]]
 		then return 0
 		else return 1
-	fi 
+	fi
 }
 
 function _screen_print_dcs_f ()
@@ -164,16 +164,16 @@ function _screen_load_environment_for_multiattach_f ()
 	local ENVIRONMENTSTACK="${SHELL_SESSION_DIR?}/${STY:-}.environment_stack"
 
 	if [[ -r "${ENVIRONMENTSTACK}" ]]
-	then 
+	then
 		#CURRTIME=${EPOCHSECONDS:-$(date +%s)}
-	
+
 		IFS=$'\n' read -d '' -r -a ENV < "${ENVIRONMENTSTACK}"
 		#ENV=( `< "${ENVIRONMENTSTACK}"` )
-		
+
 		CURRENV="$((${#ENV[@]} -1))"
 
 		[[ "$CURRENV" -lt 0 ]] && return
-	
+
 		if [[ -f "${ENV[$CURRENV]}" ]]; then
 			#eval unset "${SCREEN_ENV_VARIABLES[@]}"
 			unset SCREEN LANG DISPLAY SSH_AUTH_SOCK SSH_CLIENT SSH_CONNECTION
@@ -220,7 +220,7 @@ then # Try to account for hard-coded binary location (and version)
 	SCREEN_EXE=/usr/bin/screen
   while ! compgen -G "${SCREENDIR}/*"
   do # wait for SCREEN to create the socket
-    sleep 0.1 || break; 
+    sleep 0.1 || break;
   done
 else
 	 : "Job not found..."
